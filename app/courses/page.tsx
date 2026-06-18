@@ -1,99 +1,113 @@
 'use client'
 import { useState } from 'react'
-import { allCourses } from '../../lib/courses'
+import { BookOpen, Calendar } from 'lucide-react'
 
-export default function CourseRegistration() {
-  const [selectedSemester, setSelectedSemester] = useState<'First' | 'Second'>('First')
+const firstSemesterCourses = [
+  { code: 'GNS101', name: 'Use of English I', units: 2 },
+  { code: 'GNS103', name: 'Nigerian People and Culture', units: 2 },
+  { code: 'MTH101', name: 'General Mathematics I', units: 3 },
+]
+
+const secondSemesterCourses = [
+  { code: 'GNS102', name: 'Use of English II', units: 2 },
+  { code: 'MTH102', name: 'General Mathematics II', units: 3 },
+  { code: 'PHY101', name: 'General Physics I', units: 3 },
+]
+
+export default function CoursesPage() {
+  const [activeSemester, setActiveSemester] = useState<'first' | 'second' | null>(null)
   const [selectedCourses, setSelectedCourses] = useState<string[]>([])
 
-  const semesterCourses = allCourses.filter(c => c.semester === selectedSemester)
-  
   const totalUnits = selectedCourses.reduce((sum, code) => {
+    const allCourses = [...firstSemesterCourses, ...secondSemesterCourses]
     const course = allCourses.find(c => c.code === code)
-    return sum + (course?.unit || 0)
+    return sum + (course?.units || 0)
   }, 0)
 
   const toggleCourse = (code: string) => {
-    setSelectedCourses(prev => 
-      prev.includes(code) 
-        ? prev.filter(c => c !== code)
-        : [...prev, code]
+    setSelectedCourses(prev =>
+      prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]
     )
   }
 
-  const handleSubmit = () => {
-    alert(`Submitted ${selectedCourses.length} courses, ${totalUnits} units for ${selectedSemester} Semester`)
-    // Later we’ll save to database here
-  }
+  const coursesToShow = activeSemester === 'first' ? firstSemesterCourses : secondSemesterCourses
 
   return (
-    <div className="p-6 max-w-4xl">
-      {/* Green Header */}
-      <div className="bg-green-600 text-white p-6 rounded-xl mb-6">
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-green-600 text-white p-6 rounded-xl">
         <h1 className="text-2xl font-bold">Course Registration</h1>
-        <p className="mt-2 opacity-90">Level: 100L | Selected Units: {totalUnits}</p>
+        <p className="mt-2">Level: 100L | Selected Units: {totalUnits}</p>
       </div>
 
-      {/* Semester Tabs - like tuition fee bar */}
-      <div className="flex gap-3 mb-6">
+      {/* Semester Cards - like Tuition Fee bars */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* First Semester Card */}
         <button
-          onClick={() => setSelectedSemester('First')}
-          className={`flex-1 px-6 py-4 rounded-xl font-bold text-lg transition-all ${
-            selectedSemester === 'First'
-              ? 'bg-green-600 text-white shadow-lg'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          onClick={() => setActiveSemester(activeSemester === 'first' ? null : 'first')}
+          className={`p-6 rounded-xl border-t-4 text-left transition-all ${
+            activeSemester === 'first'
+              ? 'border-green-600 bg-green-50 shadow-lg'
+              : 'border-gray-300 bg-white hover:shadow-md'
           }`}
         >
-          First Semester
+          <div className="flex items-center gap-3">
+            <BookOpen className={`w-8 h-8 ${activeSemester === 'first' ? 'text-green-600' : 'text-gray-500'}`} />
+            <div>
+              <h3 className="text-lg font-bold text-gray-800">First Semester</h3>
+              <p className="text-sm text-gray-500">{firstSemesterCourses.length} courses</p>
+            </div>
+          </div>
         </button>
+
+        {/* Second Semester Card */}
         <button
-          onClick={() => setSelectedSemester('Second')}
-          className={`flex-1 px-6 py-4 rounded-xl font-bold text-lg transition-all ${
-            selectedSemester === 'Second'
-              ? 'bg-green-600 text-white shadow-lg'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          onClick={() => setActiveSemester(activeSemester === 'second' ? null : 'second')}
+          className={`p-6 rounded-xl border-t-4 text-left transition-all ${
+            activeSemester === 'second'
+              ? 'border-blue-600 bg-blue-50 shadow-lg'
+              : 'border-gray-300 bg-white hover:shadow-md'
           }`}
         >
-          Second Semester
+          <div className="flex items-center gap-3">
+            <Calendar className={`w-8 h-8 ${activeSemester === 'second' ? 'text-blue-600' : 'text-gray-500'}`} />
+            <div>
+              <h3 className="text-lg font-bold text-gray-800">Second Semester</h3>
+              <p className="text-sm text-gray-500">{secondSemesterCourses.length} courses</p>
+            </div>
+          </div>
         </button>
       </div>
 
-      {/* Courses List */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-xl font-bold mb-4 text-gray-800">{selectedSemester} Semester Courses</h2>
-        
-        {semesterCourses.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No courses added for {selectedSemester} Semester yet</p>
-        ) : (
+      {/* Courses List - Only shows when card is clicked */}
+      {activeSemester && (
+        <div className="bg-white p-6 rounded-xl shadow">
+          <h2 className="text-xl font-bold mb-4">
+            {activeSemester === 'first' ? 'First' : 'Second'} Semester Courses
+          </h2>
+          
           <div className="space-y-3">
-            {semesterCourses.map(course => (
-              <label 
-                key={course.code} 
-                className="flex items-center gap-4 p-4 border-gray-200 rounded-lg hover:border-green-400 hover:bg-green-50 cursor-pointer transition"
-              >
-                <input 
+            {coursesToShow.map(course => (
+              <label key={course.code} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                <input
                   type="checkbox"
                   checked={selectedCourses.includes(course.code)}
                   onChange={() => toggleCourse(course.code)}
-                  className="w-5 h-5 accent-green-600"
+                  className="w-5 h-5"
                 />
                 <div className="flex-1">
-                  <p className="font-bold text-gray-800">{course.code} - {course.title}</p>
-                  <p className="text-sm text-gray-600">{course.unit} Unit{course.unit > 1 ? 's' : ''}</p>
+                  <p className="font-semibold">{course.code} - {course.name}</p>
+                  <p className="text-sm text-gray-500">{course.units} Units</p>
                 </div>
               </label>
             ))}
           </div>
-        )}
 
-        <button 
-          onClick={handleSubmit}
-          disabled={selectedCourses.length === 0}
-          className="mt-6 w-full bg-green-600 text-white px-6 py-4 rounded-xl font-bold text-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
-        >
-          Submit {selectedSemester} Semester Courses
-        </button>
-      </div>
+          <button className="mt-6 bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700">
+            Submit Courses
+          </button>
+        </div>
+      )}
     </div>
   )
 }
