@@ -1,21 +1,45 @@
-import { Bell, User } from 'lucide-react'
-import Link from 'next/link'
+'use client'
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
+import Link from "next/link"
+import { User } from "lucide-react"
 
-export default function DashboardPage() {
+export default function Dashboard() {
+  const [profile, setProfile] = useState<any>(null)
+
+  useEffect(() => {
+    loadData()
+  }, [])
+
+  const loadData = async () => {
+    const result = await supabase.auth.getUser()
+    const user = result.data.user
+    
+    if (user) {
+      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+      setProfile(data)
+    }
+  }
+
   return (
-    <div>
-      {/* Green welcome card with bell */}
-      <div className="bg-green-600 text-white p-6 rounded-xl mb-8 flex items-center justify-between">
+    <div className="w-full">
+      {/* Welcome Card - full width on mobile */}
+      <div className="bg-green-600 text-white p-6 md:p-8 rounded-2xl mb-6 w-full">
         <h1 className="text-2xl md:text-3xl font-bold">Welcome back to Bells Portal</h1>
-        <Bell size={28} />
       </div>
 
-      {/* Student Info card - clickable with green top border */}
-      <Link href="/student-info" className="block max-w-md">
-        <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-green-500 hover:shadow-md transition cursor-pointer">
-          <User size={32} className="text-green-600 mb-3" />
-          <h2 className="text-xl font-bold text-gray-800">Student Info</h2>
-          <p className="text-gray-500 mt-1">View your details</p>
+      {/* Student Info card - responsive width */}
+      <Link href="/student-info">
+        <div className="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition cursor-pointer border-t-4 border-green-600 w-full max-w-md">
+          <div className="flex items-center gap-4">
+            <div className="bg-green-100 p-3 rounded-full flex-shrink-0">
+              <User size={28} className="text-green-600" />
+            </div>
+            <div>
+              <h3 className="font-bold text-lg text-gray-800">Student Info</h3>
+              <p className="text-gray-500 text-sm">View your details</p>
+            </div>
+          </div>
         </div>
       </Link>
     </div>
