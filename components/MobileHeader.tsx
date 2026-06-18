@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { supabase } from '@/lib/supabase'
+import { supabase } from '../lib/supabase'
 
 export function MobileHeader() {
   const [open, setOpen] = useState(false)
