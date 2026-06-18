@@ -1,28 +1,19 @@
+import { Bell, User } from 'lucide-react'
+
 export default function DashboardPage() {
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl p-6 shadow-md">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Welcome back to Bells Portal</h1>
-        <p className="text-gray-600">Akinsola Kolawole • Computer Science 300L</p>
+    <div>
+      {/* Green welcome card with bell */}
+      <div className="bg-green-600 text-white p-6 rounded-xl mb-8 flex items-center justify-between">
+        <h1 className="text-2xl md:text-3xl font-bold">Welcome back to Bells Portal</h1>
+        <Bell size={24} />
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <p className="text-sm text-gray-600">CGPA</p>
-          <p className="text-2xl font-bold">4.21</p>
-        </div>
-        <div className="bg-green-50 p-4 rounded-lg">
-          <p className="text-sm text-gray-600">Courses</p>
-          <p className="text-2xl font-bold">7</p>
-        </div>
-        <div className="bg-orange-50 p-4 rounded-lg">
-          <p className="text-sm text-gray-600">Outstanding</p>
-          <p className="text-2xl font-bold">₦265k</p>
-        </div>
-        <div className="bg-purple-50 p-4 rounded-lg">
-          <p className="text-sm text-gray-600">Attendance</p>
-          <p className="text-2xl font-bold">92%</p>
-        </div>
+
+      {/* Student Info card with top green border */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-green-500 max-w-md">
+        <User size={32} className="text-green-600 mb-3" />
+        <h2 className="text-xl font-bold text-gray-800">Student Info</h2>
+        <p className="text-gray-500 mt-1">View your details</p>
       </div>
     </div>
   )
