@@ -2,16 +2,36 @@
 import { useState } from 'react'
 import { BookOpen, Calendar } from 'lucide-react'
 
+// First Semester Courses from your first image
 const firstSemesterCourses = [
-  { code: 'GNS101', name: 'Use of English I', units: 2 },
-  { code: 'GNS103', name: 'Nigerian People and Culture', units: 2 },
-  { code: 'MTH101', name: 'General Mathematics I', units: 3 },
+  { code: 'GST 111', name: 'Communication in English', units: 2 },
+  { code: 'GST 113', name: 'Nigerian Peoples and Culture', units: 2 },
+  { code: 'MTH 101', name: 'Elementary Mathematics I', units: 3 },
+  { code: 'MTH 103', name: 'Elementary Mathematics III / Further Mathematics', units: 3 },
+  { code: 'PHY 101', name: 'General Physics I', units: 3 },
+  { code: 'PHY 103', name: 'General Physics III', units: 3 },
+  { code: 'CHM 101', name: 'General Chemistry I', units: 3 },
+  { code: 'CPE/CSC 101', name: 'Introduction to Computing', units: 2 },
+  { code: 'ENG 101', name: 'Introduction to Engineering', units: 2 },
+  { code: 'PHY 107', name: 'Physics Practical I', units: 1 },
+  { code: 'CHM 107', name: 'Chemistry Practical I', units: 1 },
 ]
 
+// Second Semester Courses from your second image
 const secondSemesterCourses = [
-  { code: 'GNS102', name: 'Use of English II', units: 2 },
-  { code: 'MTH102', name: 'General Mathematics II', units: 3 },
-  { code: 'PHY101', name: 'General Physics I', units: 3 },
+  { code: 'GST 102', name: 'Communication in English II', units: 2 },
+  { code: 'GST 106', name: 'Entrepreneurship Studies', units: 2 },
+  { code: 'GST 108/110', name: 'Government, Society and Economy', units: 2 },
+  { code: 'MTH 102', name: 'Elementary Mathematics II', units: 3 },
+  { code: 'MTH 104', name: 'Elementary Mathematics IV', units: 3 },
+  { code: 'PHY 102', name: 'General Physics II', units: 3 },
+  { code: 'PHY 104', name: 'General Physics IV', units: 3 },
+  { code: 'CHM 102', name: 'General Chemistry II', units: 3 },
+  { code: 'PHY 108', name: 'General Physics Practical II', units: 1 },
+  { code: 'CHM 108', name: 'General Chemistry Practical II', units: 1 },
+  { code: 'CPE 102 / CSC 102', name: 'Introduction to Computing II', units: 2 },
+  { code: 'ENG 102 / GET 102', name: 'Engineering Drawing/Graphics', units: 2 },
+  { code: 'Workshop Practice', name: 'Workshop Practice', units: 1 },
 ]
 
 export default function CoursesPage() {
@@ -40,9 +60,8 @@ export default function CoursesPage() {
         <p className="mt-2">Level: 100L | Selected Units: {totalUnits}</p>
       </div>
 
-      {/* Semester Cards - like Tuition Fee bars */}
+      {/* Semester Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* First Semester Card */}
         <button
           onClick={() => setActiveSemester(activeSemester === 'first' ? null : 'first')}
           className={`p-6 rounded-xl border-t-4 text-left transition-all ${
@@ -60,7 +79,6 @@ export default function CoursesPage() {
           </div>
         </button>
 
-        {/* Second Semester Card */}
         <button
           onClick={() => setActiveSemester(activeSemester === 'second' ? null : 'second')}
           className={`p-6 rounded-xl border-t-4 text-left transition-all ${
@@ -79,14 +97,14 @@ export default function CoursesPage() {
         </button>
       </div>
 
-      {/* Courses List - Only shows when card is clicked */}
+      {/* Courses List */}
       {activeSemester && (
         <div className="bg-white p-6 rounded-xl shadow">
           <h2 className="text-xl font-bold mb-4">
             {activeSemester === 'first' ? 'First' : 'Second'} Semester Courses
           </h2>
           
-          <div className="space-y-3">
+          <div className="space-y-3 max-h-96 overflow-y-auto">
             {coursesToShow.map(course => (
               <label key={course.code} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
                 <input
