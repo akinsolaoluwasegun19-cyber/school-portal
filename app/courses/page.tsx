@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { BookOpen, Calendar } from 'lucide-react'
 
-// First Semester Courses from your first image
+// First Semester Courses
 const firstSemesterCourses = [
   { code: 'GST 111', name: 'Communication in English', units: 2 },
   { code: 'GST 113', name: 'Nigerian Peoples and Culture', units: 2 },
@@ -17,7 +17,7 @@ const firstSemesterCourses = [
   { code: 'CHM 107', name: 'Chemistry Practical I', units: 1 },
 ]
 
-// Second Semester Courses from your second image
+// Second Semester Courses  
 const secondSemesterCourses = [
   { code: 'GST 102', name: 'Communication in English II', units: 2 },
   { code: 'GST 106', name: 'Entrepreneurship Studies', units: 2 },
@@ -57,7 +57,7 @@ export default function CoursesPage() {
       {/* Header */}
       <div className="bg-green-600 text-white p-6 rounded-xl">
         <h1 className="text-2xl font-bold">Course Registration</h1>
-        <p className="mt-2">Level: 100L | Selected Units: {totalUnits}</p>
+        <p className="mt-2 text-lg">Level: 100L | Selected Units: <span className="font-bold">{totalUnits}</span></p>
       </div>
 
       {/* Semester Cards */}
@@ -73,8 +73,8 @@ export default function CoursesPage() {
           <div className="flex items-center gap-3">
             <BookOpen className={`w-8 h-8 ${activeSemester === 'first' ? 'text-green-600' : 'text-gray-500'}`} />
             <div>
-              <h3 className="text-lg font-bold text-gray-800">First Semester</h3>
-              <p className="text-sm text-gray-500">{firstSemesterCourses.length} courses</p>
+              <h3 className="text-lg font-bold text-black">First Semester</h3>
+              <p className="text-sm text-gray-600">{firstSemesterCourses.length} courses</p>
             </div>
           </div>
         </button>
@@ -90,8 +90,8 @@ export default function CoursesPage() {
           <div className="flex items-center gap-3">
             <Calendar className={`w-8 h-8 ${activeSemester === 'second' ? 'text-blue-600' : 'text-gray-500'}`} />
             <div>
-              <h3 className="text-lg font-bold text-gray-800">Second Semester</h3>
-              <p className="text-sm text-gray-500">{secondSemesterCourses.length} courses</p>
+              <h3 className="text-lg font-bold text-black">Second Semester</h3>
+              <p className="text-sm text-gray-600">{secondSemesterCourses.length} courses</p>
             </div>
           </div>
         </button>
@@ -100,28 +100,28 @@ export default function CoursesPage() {
       {/* Courses List */}
       {activeSemester && (
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-bold mb-4">
+          <h2 className="text-xl font-bold mb-4 text-black">
             {activeSemester === 'first' ? 'First' : 'Second'} Semester Courses
           </h2>
           
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {coursesToShow.map(course => (
-              <label key={course.code} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+              <label key={course.code} className="flex items-center gap-4 p-4 border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition">
                 <input
                   type="checkbox"
                   checked={selectedCourses.includes(course.code)}
                   onChange={() => toggleCourse(course.code)}
-                  className="w-5 h-5"
+                  className="w-5 h-5 accent-green-600"
                 />
                 <div className="flex-1">
-                  <p className="font-semibold">{course.code} - {course.name}</p>
-                  <p className="text-sm text-gray-500">{course.units} Units</p>
+                  <p className="font-bold text-black text-base">{course.code} - {course.name}</p>
+                  <p className="text-sm text-gray-600 mt-1">{course.units} Units</p>
                 </div>
               </label>
             ))}
           </div>
 
-          <button className="mt-6 bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700">
+          <button className="mt-6 bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 transition">
             Submit Courses
           </button>
         </div>
