@@ -1,88 +1,68 @@
-'use client'  // <- THIS LINE IS CRITICAL. Don't remove it
+'use client' // <- Must be line 1, no space above it
 import './globals.css'
-import { Inter } from 'next/font/google'
 import { useState } from 'react'
-import { Menu, X, LayoutGrid, CreditCard, BookOpen, FileText, LogOut, Bell, User } from 'lucide-react'
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-
-const inter = Inter({ subsets: ['latin'] })
-
-const menuItems = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutGrid },
-  { name: 'Payment Info', href: '/payment', icon: CreditCard },
-  { name: 'Courses', href: '/courses', icon: BookOpen },
-  { name: 'Results', href: '/student-info', icon: FileText },
-  { name: 'Logout', href: '/logout', icon: LogOut },
-]
+import { Menu, X, LayoutDashboard, BookOpen, FileText } from 'lucide-react'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const pathname = usePathname()
+
+  const menuItems = [
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Courses', href: '/courses', icon: BookOpen },
+    { name: 'Results', href: '/student-info', icon: FileText },
+    { name: 'Payment', href: '/payment', icon: LayoutDashboard },
+  ]
 
   return (
     <html lang="en">
-      <body className={`${inter.className} overflow-x-hidden bg-gray-50`}>
-        <div className="flex min-h-screen">
-          
-          {/* Mobile Hamburger - z-50 so it stays on top */}
-          <button 
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="fixed top-4 left-4 z-50 md:hidden bg-green-600 text-white p-2 rounded-lg shadow-lg"
-          >
-            {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+      <body className="bg-gray-50">
 
-          {/* Mobile backdrop - z-30, lower than button */}
-          {sidebarOpen && (
-            <div 
-              className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-              onClick={() => setSidebarOpen(false)}
-            />
-          )}
+        {/* Mobile hamburger button - z-[9999] to force it on top */}
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="fixed top-4 left-4 z-[9999] md:hidden bg-green-600 text-white p-3 rounded-lg shadow-lg"
+        >
+          {sidebarOpen? <X size={24} /> : <Menu size={24} />}
+        </button>
 
-          {/* Sidebar - z-40, between button and backdrop */}
-          <aside className={`
-            fixed md:static inset-y-0 left-0 z-40 
-            w-64 bg-green-600 text-white p-4 rounded-r-2xl
-            transform transition-transform duration-300
-            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-          `}>
-            <div className="flex items-center gap-2 mb-8">
-              <div className="bg-white rounded-full p-2">
-                <User size={20} className="text-green-600" />
-              </div>
-              <h1 className="text-xl font-bold">Bells Portal</h1>
-            </div>
-            
+        {/* Sidebar */}
+        <aside
+          className={`fixed top-0 left-0 h-full w-64 bg-green-600 text-white transform transition-transform duration-300 z-40
+          ${sidebarOpen? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+        >
+          <div className="p-6 mt-16 md:mt-0">
+            <h2 className="text-2xl font-bold mb-8">Bells Portal</h2>
             <nav className="space-y-2">
               {menuItems.map((item) => {
                 const Icon = item.icon
-                const isActive = pathname === item.href
                 return (
-                  <Link
+                  <a
                     key={item.name}
                     href={item.href}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center gap-3 p-3 rounded-lg ${
-                      isActive 
-                        ? 'bg-white text-green-600 font-semibold' 
-                        : 'hover:bg-green-700 text-white'
-                    }`}
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-green-700 transition"
                   >
                     <Icon size={20} />
                     {item.name}
-                  </Link>
+                  </a>
                 )
               })}
             </nav>
-          </aside>
+          </div>
+        </aside>
 
-          {/* Main content */}
-          <main className="flex-1 md:ml-64 w-full p-4 md:p-8 pt-20 md:pt-8 bg-gray-50">
-            {children}
-          </main>
-        </div>
+        {/* Mobile overlay - only shows when sidebar open */}
+        {sidebarOpen && (
+          <div
+            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          />
+        )}
+
+        {/* Main content */}
+        <main className="md:ml-64 min-h-screen p-4 md:p-8 pt-20 md:pt-8">
+          {children}
+        </main>
       </body>
     </html>
   )
