@@ -59,8 +59,8 @@ export default function StudentInfoPage() {
     const result = await supabase.auth.getUser()
     const user = result.data.user
 
-   const fileExt = file.name.split('.').pop()
-if (!user) throw new Error('User not logged in')
+const fileExt = file.name.split('.').pop()
+if (!user) return
 const fileName = `${user.id}-${Date.now()}.${fileExt}`
     const filePath = `avatars/${fileName}`
 
