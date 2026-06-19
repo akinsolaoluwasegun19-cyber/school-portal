@@ -60,8 +60,10 @@ export default function StudentInfoPage() {
     const user = result.data.user
 
 const fileExt = file.name.split('.').pop()
-if (!user) return
-const fileName = `${user!.id}-${Date.now()}.${fileExt}`
+if (!user) {
+  throw new Error('User not authenticated')
+}
+const fileName = `${user.id}-${Date.now()}.${fileExt}`
     const filePath = `avatars/${fileName}`
 
     const { error: uploadError } = await supabase.storage
